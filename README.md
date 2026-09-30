@@ -30,6 +30,7 @@ To be added
 
 | File Name | Description |
 | :------- | :------ |
+| compile_occurrences.R | Read and filter occurrence data for _M. tepidus_ from Bee Library and Dorey et al., 2023 |
 | weather.R | Analyze difference in climatic variables during the development year relative to 30-year normals  |
 | phenology.R | Visualize and compare other occurrence data |
 
