@@ -438,3 +438,156 @@ occ_climate <- left_join(data,month_clim_wide,
 occ_climate_df <- st_drop_geometry(occ_climate)
 
 write_csv(occ_climate_df, "../data/occ_climate_df_1oct2026.csv")
+
+
+#### add in the precipitation data for these months as well
+
+prism_ppt_extract <- function(data) {
+  
+  results <- list()
+  
+  # Create the 12 climate months needed for each record
+  climate_months <- data %>%
+    dplyr::select(row_id, year, geometry) %>%
+    dplyr::distinct(row_id, .keep_all = TRUE) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      climate_date = list(
+        seq.Date(
+          as.Date(paste0(year - 1, "-07-01")),
+          as.Date(paste0(year, "-06-01")),
+          by = "month"
+        )
+      )
+    ) %>%
+    dplyr::ungroup() %>%
+    tidyr::unnest(climate_date) %>%
+    dplyr::mutate(
+      climate_year = as.integer(format(climate_date, "%Y")),
+      climate_month = as.integer(format(climate_date, "%m")),
+      
+      # July-Dec of previous year = prev7-prev12
+      # Jan-Jun of occurrence year = 1-6
+      climate_period = dplyr::if_else(
+        climate_year < year,
+        paste0("prev", climate_month),
+        as.character(climate_month)
+      ),
+      
+      ym = sprintf("%04d%02d", climate_year, climate_month)
+    )
+  
+  # Only download each unique PRISM month once
+  months_needed <- unique(climate_months$ym)
+  
+  for (this_ym in months_needed) {
+    
+    this_year  <- as.integer(substr(this_ym, 1, 4))
+    this_month <- as.integer(substr(this_ym, 5, 6))
+    
+    message("Processing PRISM precipitation: ", this_ym)
+    
+    # PRISM 4-km AN monthly precipitation
+    url <- paste0(
+      "https://data.prism.oregonstate.edu/time_series/us/an/4km/ppt/monthly/",
+      this_year,
+      "/prism_ppt_us_25m_",
+      this_ym,
+      ".zip"
+    )
+    
+    zipfile <- file.path(
+      "prism_ppt",
+      paste0("prism_ppt_", this_ym, ".zip")
+    )
+    
+    # Download if not already present
+    if (!file.exists(zipfile)) {
+      tryCatch(
+        download.file(url, zipfile, mode = "wb", quiet = TRUE),
+        error = function(e) {
+          warning("Could not download ", this_ym, ": ", e$message)
+        }
+      )
+    }
+    
+    # Check that download worked
+    if (!file.exists(zipfile) ||
+        is.na(file.info(zipfile)$size) ||
+        file.info(zipfile)$size < 10000) {
+      warning("Could not download: ", this_ym)
+      next
+    }
+    
+    # Records needing this climate month
+    d <- climate_months %>%
+      dplyr::filter(ym == this_ym)
+    
+    # Temporary extraction folder
+    tempdir <- tempfile()
+    dir.create(tempdir)
+    
+    unzip(zipfile, exdir = tempdir)
+    
+    # Find the raster
+    tif <- list.files(
+      tempdir,
+      pattern = "\\.(tif|tiff)$",
+      full.names = TRUE,
+      recursive = TRUE,
+      ignore.case = TRUE
+    )
+    
+    if (length(tif) == 0) {
+      warning("No TIFF found for ", this_ym)
+      unlink(tempdir, recursive = TRUE)
+      next
+    }
+    
+    r <- terra::rast(tif[1])
+    
+    # Extract precipitation at occurrence locations
+    pts <- terra::vect(d)
+    
+    values <- terra::extract(r, pts)[[2]]
+    
+    # Store results
+    results[[length(results) + 1]] <- d %>%
+      sf::st_drop_geometry() %>%
+      dplyr::mutate(
+        ppt = values
+      ) %>%
+      dplyr::select(
+        row_id,
+        year,
+        climate_period,
+        climate_year,
+        climate_month,
+        ym,
+        ppt
+      )
+    
+    unlink(tempdir, recursive = TRUE)
+  }
+  
+  # Combine all months
+  bind_rows(results)
+}
+
+# run the function to get precip values
+ppt_data <- prism_ppt_extract(data)
+
+ppt_data_wide <- ppt_data %>% 
+  pivot_wider(
+    id_cols = c(row_id, year),
+    names_from = climate_period,
+    values_from = ppt,
+    names_glue = "{.value}_m.{climate_period}"
+  )
+
+occ_climate_both <- left_join(occ_climate,ppt_data_wide,
+                         by = c("row_id","year"))
+
+occ_climate_both_df <- st_drop_geometry(occ_climate_both)
+
+write_csv(occ_climate_both_df, "../data/occ_climate_all_df_1oct2026.csv")
