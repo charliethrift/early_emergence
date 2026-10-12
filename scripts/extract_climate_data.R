@@ -415,8 +415,8 @@ tmean_data <- prism_extract(data, "tmean")
 tmean_data1 <- tmean_data %>% 
   drop_na(year)
 
-write_csv(tmean_data1, "../data/tmean_data_1oct2026.csv")
-testing123 <- read_csv("../data/tmean_data_1oct2026.csv")
+#write_csv(tmean_data1, "../data/tmean_data_1oct2026.csv")
+#testing123 <- read_csv("../data/tmean_data_1oct2026.csv")
 
 
 # combine the tmean and tmax into one dataframe, with occurrence data, and write it as csv.
@@ -437,7 +437,7 @@ occ_climate <- left_join(data,month_clim_wide,
                          by = c("row_id","year"))
 occ_climate_df <- st_drop_geometry(occ_climate)
 
-write_csv(occ_climate_df, "../data/occ_climate_df_1oct2026.csv")
+#write_csv(occ_climate_df, "../data/occ_climate_df_1oct2026.csv")
 
 
 #### add in the precipitation data for these months as well
