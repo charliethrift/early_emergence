@@ -24,6 +24,7 @@ To be added
 | Dorey_Mel_tep_occ.csv | Occurrence data filtered from Dorey et al., 2023 |
 | prism_2025-26_data.csv | Weather data from PRISM during development year |
 | prism_1991_2021_daily.csv | Weather data from PRISM for 1991-2021 for 30 year normals | 
+| occ_climate_all_df_1oct2026.csv | Filtered occurrence data with climate variables |
 
 
 ## Scripts: Contains code for data analysis in R
@@ -31,7 +32,8 @@ To be added
 | File Name | Description |
 | :------- | :------ |
 | compile_occurrences.R | Read and filter occurrence data for _M. tepidus_ from Bee Library and Dorey et al., 2023 |
-| extract_climate_data.R | Assemble monthly cliamate data (mean temp, max temp, precipitation) for occurrences with PRISM |
+| extract_climate_data.R | Assemble monthly climate data (mean temp, max temp, precipitation) for occurrences with PRISM |
+| analyze_climate_doy.R | Analyze relationship between emergence (doy = day of year) and climate |
 | weather.R | Analyze difference in climatic variables during the development year relative to 30-year normals  |
 | phenology.R | Visualize and compare other occurrence data |
 
