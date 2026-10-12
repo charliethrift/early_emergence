@@ -1,4 +1,4 @@
-# Early emergence of a ground-nesting bee (_Melissodes tepidus timberlakei_) and its cleptoparasite (_Triepeolous sp._) following heat waves
+# Explaining an early ground-nesting bee emergence with climate and occurrence data: Temperature, not precipitation, advances onset
 [Charles N. Thrift](https://orcid.org/0000-0002-4257-6951), Jennifer Schlauch Saiyawong, & [Katja C. Seltmann](https://orcid.org/0000-0001-5354-6048)
 
 _In prep_
