@@ -9,12 +9,11 @@ library(sf)
 
 # Read in occurrence data
 
-occ_data <- read.csv("../data/occ_filtered_30sep2026.csv")
+occ_data <- read_csv("../data/occ_filtered_21oct2026.csv")
 occ_data <- occ_data %>% 
   st_as_sf(coords = c("decimalLongitude","decimalLatitude"),
            crs = 4326,
-           remove = FALSE) %>% 
-  filter(year > 1895) # climate data starts
+           remove = FALSE)
 data <- occ_data %>% 
   mutate(row_id = row_number())
 
@@ -589,5 +588,6 @@ occ_climate_both <- left_join(occ_climate,ppt_data_wide,
                          by = c("row_id","year"))
 
 occ_climate_both_df <- st_drop_geometry(occ_climate_both)
+
 
 write_csv(occ_climate_both_df, "../data/occ_climate_all_df_1oct2026.csv")

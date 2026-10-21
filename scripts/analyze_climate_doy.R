@@ -35,17 +35,16 @@ data <- data |>
 
 # lmer to test doy~clim w/ random effect for location
 # model #1: temperature
-mod_temp <- lmerTest::lmer(doy~tmean_year+ppt_year_3 + (1|decimalLatitude),
+mod_temp <- lmerTest::lmer(doy~tmean_year + (1|decimalLatitude),
                           data = data)
 plot(DHARMa::simulateResiduals(mod_temp))
 summary(mod_temp)
 performance::r2(mod_temp)
 
-# model #2: precipitation (cube root transformed)
-data <- data |> 
-  mutate(ppt_year_3 = ppt_year^(1/3))
-mod_precip <- lmerTest::lmer(doy~ppt_year_3 + (1|decimalLatitude),
+# model #2: precipitation
+mod_precip <- lmerTest::lmer(doy~ppt_year + (1|decimalLatitude),
                               data = data)
+plot(DHARMa::simulateResiduals(mod_precip))
 summary(mod_precip)
 performance::r2(mod_precip)
 
@@ -53,7 +52,7 @@ performance::r2(mod_precip)
 mod_temp_predict <- 
   ggeffects::ggpredict(mod_temp, terms = "tmean_year")
 mod_precip_pred <- 
-  ggeffects::ggpredict(mod_precip,terms = "ppt_year_3")
+  ggeffects::ggpredict(mod_precip,terms = "ppt_year")
 
 # plot each relationship with model predictions
 figA <- ggplot()+
@@ -78,21 +77,21 @@ figA <- ggplot()+
                      labels = c("Apr","May","Jun","Jul",
                                 "Aug", "Sep", "Oct", "Nov"))+
   labs(y = "emergence",
-       x = "mean temp (°C)")
+       x = "mean temperature (°C)")
 
 figB <- ggplot()+
-  geom_ribbon(data = mod_loc_ppt_pred,
+  geom_ribbon(data = mod_precip_pred,
               aes(x = x,
                   y = predicted,
                   ymin = conf.low,
                   ymax = conf.high),
               alpha = 0.4)+
-  geom_line(data = mod_loc_ppt_pred,
+  geom_line(data = mod_precip_pred,
             aes(x = x,
                 y = predicted),
             linetype = "dashed",
             linewidth = 1)+
-  geom_point(data = data, aes(ppt_year_3,doy),
+  geom_point(data = data, aes(ppt_year,doy),
              alpha = 0.5,
              color = "cornflowerblue")+
   theme_classic()+
@@ -103,10 +102,8 @@ figB <- ggplot()+
                                 182,213,244,274,305),
                      labels = c("","","","",
                                 "", "", "", ""))+
-  scale_x_continuous(breaks = c(2,4,6,8,10),
-                     labels = c(8,64,216,512,1000))+
   labs(y = "",
-       x = "cumulative precip (mm)")
+       x = "cumulative precipitation (mm)")
 
 
 cowplot::plot_grid(figA,NULL,figB,nrow = 1,
