@@ -19,11 +19,12 @@ Understanding the drivers of bee phenology is important for predicting how clima
 
 | File Name | Description |
 | :------- | :------ |
-| Mel_tep_occ.csv | Occurrence data from Bee Library |
-| Dorey_Mel_tep_occ.csv | Occurrence data filtered from Dorey et al., 2023 |
-| prism_2025-26_data.csv | Weather data from PRISM during development year |
-| prism_1991_2021_daily.csv | Weather data from PRISM for 1991-2021 for 30 year normals | 
+| occ_beelib_30sep2026.csv | Occurrence data from Bee Library |
 | occ_climate_all_df_1oct2026.csv | Filtered occurrence data with climate variables |
+| occ_climate_all_df_1oct2026_final.csv | Version for Table S1 (includes institution code) |
+| occ_dorey_filtered_30sep2026.csv | Occurrence data filtered from Dorey et al., 2023 |
+| prism_1991_2021_daily.csv | Weather data from PRISM for 1991-2021 for 30 year normals and 2022-2025 for last 5 year analyses | 
+| prism_2025-26_data.csv | Weather data from PRISM during 2026 development year |
 
 
 ## Scripts: Contains code for data analysis in R
