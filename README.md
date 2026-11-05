@@ -1,17 +1,16 @@
 # Explaining an early ground-nesting bee emergence with climate and occurrence data: Temperature, not precipitation, advances onset
-[Charles N. Thrift](https://orcid.org/0000-0002-4257-6951), Jennifer Schlauch Saiyawong, & [Katja C. Seltmann](https://orcid.org/0000-0001-5354-6048)
+[Charles N. Thrift](https://orcid.org/0000-0002-4257-6951), [Madeleine M. Ostwald](https://orcid.org/0000-0002-9869-8835), [Jennifer Schlauch Saiyawong](https://orcid.org/0009-0004-2201-2077), & [Katja C. Seltmann](https://orcid.org/0000-0001-5354-6048)
 
 _In prep_
 
 Please contact Charles Thrift for questions regarding the code or data (cnthrift@ucsb.edu)
 
 ## Abstract 
-To be added
+Understanding the drivers of bee phenology is important for predicting how climate change may alter the temporal overlap between bee activity and plant flowering, with consequences for pollination. We documented unusually early emergence of Melissodes tepidus timberlakei Cockerell, 1926 at a perennial nesting site in spring 2026 and examined the relationship between emergence and climatic conditions with (1) five years of nesting observations at a single site, and (2) 119 years of M. tepidus occurrence records from across the Western United States. We found warming temperatures were associated with earlier emergence, whereas precipitation was not, and we emphasize the utility of monitoring ground nests to understand emergence drivers in bees during ongoing climate change.
 
 ## Methods Summary
-1. Compare observed emergence date to other collection events of this subspecies at or near this nesting site
-2. Compare observed emergence date to broader occurrence data for species _Melissodes tepidus_
-3. Analyze difference in climatic variables during the development year relative to 30-year normals
+1. Compare emergence dates in the previous five years at one nesting site to weather during development for _Melissodes tepidus timberlakei_
+2. Compare emergence dates with 117 years of occurrence data to climate conditions for _Melissodes tepidus_
 
 
 # Repository Directory
