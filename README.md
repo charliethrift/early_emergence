@@ -34,8 +34,7 @@ Understanding the drivers of bee phenology is important for predicting how clima
 | compile_occurrences.R | Read and filter occurrence data for _M. tepidus_ from Bee Library and Dorey et al., 2023 |
 | extract_climate_data.R | Assemble monthly climate data (mean temp, max temp, precipitation) for occurrences with PRISM |
 | analyze_climate_doy.R | Analyze relationship between emergence (doy = day of year) and climate |
-| weather.R | Analyze difference in climatic variables during the development year relative to 30-year normals  |
-| phenology.R | Visualize and compare other occurrence data |
+| analyze_last5yrs_nest.R | Analyze difference in climatic variables during the development year relative to 30-year normals  |
 
 
 
