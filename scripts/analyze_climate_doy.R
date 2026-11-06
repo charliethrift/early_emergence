@@ -32,17 +32,29 @@ data <- data |>
                             tmax_m.1,tmax_m.2,tmax_m.3,tmax_m.4,tmax_m.5,tmax_m.6)))) |> 
   ungroup()
 
+## create locations (sites) for each point based on lat/long
+data <- data |> 
+  mutate(decLat1 = round(decimalLatitude, digits = 1),
+         decLat0 = round(decimalLatitude, digits = 0),
+         decLong1 = round(decimalLongitude, digits = 1),
+         decLong0 = round(decimalLongitude, digits = 0))
+
+data <- data |> 
+  mutate(site2 = paste0("Site2_", dense_rank(interaction(decimalLatitude, decimalLongitude))),
+         site1 = paste0("Site1_", dense_rank(interaction(decLat1, decLong1))),
+         site0 = paste0("Site2_", dense_rank(interaction(decLat0, decLong0))))
+
 
 # lmer to test doy~clim w/ random effect for location
 # model #1: temperature
-mod_temp <- lmerTest::lmer(doy~tmean_year + (1|decimalLatitude),
+mod_temp <- lmerTest::lmer(doy~tmean_year + (1|site0),
                           data = data)
 plot(DHARMa::simulateResiduals(mod_temp))
 summary(mod_temp)
 performance::r2(mod_temp)
 
 # model #2: precipitation
-mod_precip <- lmerTest::lmer(doy~ppt_year + (1|decimalLatitude),
+mod_precip <- lmerTest::lmer(doy~ppt_year + (1|site0),
                               data = data)
 plot(DHARMa::simulateResiduals(mod_precip))
 summary(mod_precip)
@@ -95,8 +107,7 @@ figB <- ggplot()+
              alpha = 0.5,
              color = "cornflowerblue")+
   theme_classic()+
-  theme(axis.ticks.y = element_blank(),
-        panel.grid.minor = element_blank())+
+  theme(panel.grid.minor = element_blank())+
   scale_y_continuous(limits=c(90,305),
                      breaks = c(91,121,152,
                                 182,213,244,274,305),
@@ -113,14 +124,3 @@ ggsave("../figures/doy_by_temp_ppt.png",
        width = 16,
        height = 8,
        units = "cm")
-
-
-hist(data$decimalLatitude)
-hist(data$tmean_year)
-hist(data$ppt_year)
-hist(data$ppt_year_3) # precip with cube root transformation
-
-
-
-
-
